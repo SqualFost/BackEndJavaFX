@@ -13,7 +13,7 @@ import java.util.Optional;
  * Service pour gérer les utilisateurs
  * Charge les utilisateurs depuis un fichier JSON
  */
-public class UserService {
+public abstract class UserService {
     private List<User> users;
     private int nextId;
     private final ObjectMapper objectMapper;
@@ -25,33 +25,10 @@ public class UserService {
 
         // Charger les utilisateurs depuis le fichier JSON
         loadUsersFromJson();
+
     }
 
-    public class UserServiceImpl implements UserService {
-        private static final String JDBC_URL = "jdbc:mysql://localhost:3306/isen";
-        private static final String JDBC_USER = "root";
-        private static final String JDBC_PASSWORD = null;
-        @Override
-        public List<User> GetUsers() {
 
-            List<User> users = new ArrayList<>();
-            try (Connection conn = DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
-                 Statement stmt = conn.createStatement();
-                 ResultSet rs = stmt.executeQuery("SELECT * FROM user")) {
-                while (rs.next()) {
-                    User user = new User();
-                    user.setId(rs.getInt("id"));
-                    user.setEmail(rs.getString("email"));
-                    user.setName(rs.getString("name"));
-
-                    users.add(user);
-                }
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-            return users;
-        }
-    }
 
     /**
      * Charge les utilisateurs depuis users.json
@@ -130,4 +107,6 @@ public class UserService {
     public boolean deleteUser(int id) {
         return users.removeIf(u -> u.getId() == id);
 }
+
+    public abstract List<User> GetUsers();
 }

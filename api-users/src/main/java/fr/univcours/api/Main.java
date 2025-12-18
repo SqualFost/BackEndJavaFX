@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
  * Classe principale qui démarre le serveur API
  */
 public class Main {
-    private static UserService userService = new UserService();
+    private static UserService userService = new UserServiceImpl();
 
     public static void main(String[] args) {
         // Créer et configurer l'application Javalin
