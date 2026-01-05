@@ -1,6 +1,6 @@
 package fr.univcours.api;
 
-import fr.univcours.api.Controller.UserController;
+import fr.univcours.api.Controller.*;
 import fr.univcours.api.Database.Database;
 
 import io.javalin.Javalin;
@@ -21,28 +21,52 @@ public class Main {
 
         // Message de démarrage
         System.out.println("🚀 Serveur démarré sur http://localhost:7001");
-        System.out.println("📋 Essayez : http://localhost:7001/users");
+        System.out.println("📋 Documentation : http://localhost:7001/");
 
-        // Route GET /users - Récupère tous les utilisateurs
+        // --- Routes PAGE D'ACCUEIL ---
+        app.get("/", UserController::getHome);
+
+        // --- Routes UTILISATEURS (User) ---
         app.get("/users", UserController::getAllUser);
-        
-        // Route GET /users/search?name="" - Rechercher un utilisateur par son prénom
         app.get("/users/search", UserController::searchByName);
-
-        // Route GET /users/:id - Récupère un utilisateur par ID
         app.get("/users/{id}", UserController::getUserById);
-        
-        // Route POST /users - Ajoute un utilisateur
         app.post("/users", UserController::addUser);
-
-        // Route POST /users/:id - Modifie un utilisateur
         app.put("/users/{id}", UserController::updateById);
-
-        
-        // Route DELETE /users/:id - Supprime un utilisateur
         app.delete("/users/{id}", UserController::deleteUser);
 
-        // Route GET / - Page d'accueil
-        app.get("/", UserController::getHome);
+        // --- Routes CATEGORIES ---
+        app.get("/categories", CategorieController::getAllCategories);
+        app.get("/categories/{id}", CategorieController::getCategorieById);
+        app.post("/categories", CategorieController::addCategorie);
+        app.put("/categories/{id}", CategorieController::updateCategorie);
+        app.delete("/categories/{id}", CategorieController::deleteCategorie);
+
+        // --- Routes PLATS ---
+        app.get("/plats", PlatController::getAllPlats);
+        app.get("/plats/{id}", PlatController::getPlatById);
+        app.post("/plats", PlatController::addPlat);
+        app.put("/plats/{id}", PlatController::updatePlat);
+        app.delete("/plats/{id}", PlatController::deletePlat);
+
+        // --- Routes COMMANDES ---
+        app.get("/commandes", CommandeController::getAllCommandes);
+        app.get("/commandes/{id}", CommandeController::getCommandeById);
+        app.post("/commandes", CommandeController::addCommande);
+        app.put("/commandes/{id}", CommandeController::updateCommande);
+        app.delete("/commandes/{id}", CommandeController::deleteCommande);
+
+        // --- Routes LIGNES DE COMMANDE ---
+        app.get("/lignes-commande", LigneCommandeController::getAllLignes);
+        app.get("/lignes-commande/{id}", LigneCommandeController::getLigneById);
+        app.post("/lignes-commande", LigneCommandeController::addLigne);
+        app.put("/lignes-commande/{id}", LigneCommandeController::updateLigne);
+        app.delete("/lignes-commande/{id}", LigneCommandeController::deleteLigne);
+
+        // --- Routes ASSOCIATIONS CATEGORIE-PLAT ---
+        app.get("/categorie-plats", CategoriePlatController::getAll);
+        app.get("/categorie-plats/{id}", CategoriePlatController::getById);
+        app.post("/categorie-plats", CategoriePlatController::add);
+        app.put("/categorie-plats/{id}", CategoriePlatController::update);
+        app.delete("/categorie-plats/{id}", CategoriePlatController::delete);
     }
 }

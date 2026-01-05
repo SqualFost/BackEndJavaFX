@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Documentation API Users</title>
+    <title>Documentation API Restaurant</title>
     <style>
         :root {
             --primary-color: #4a90e2;
@@ -23,7 +23,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             background: var(--card-bg);
             padding: 40px;
@@ -35,6 +35,14 @@
             text-align: center;
             color: #2c3e50;
             margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-top: 40px;
+            margin-bottom: 20px;
         }
 
         .subtitle {
@@ -108,10 +116,13 @@
         }
 
         .note {
-            font-size: 0.8em;
-            color: #999;
-            margin-top: 5px;
-            font-style: italic;
+            font-size: 0.85em;
+            background-color: var(--code-bg);
+            padding: 8px;
+            border-radius: 4px;
+            margin-top: 8px;
+            font-family: 'Courier New', monospace;
+            color: #444;
         }
 
         footer {
@@ -125,8 +136,10 @@
 <body>
 
 <div class="container">
-    <h1>🚀 API Users</h1>
-    <p class="subtitle">Documentation et interface de test</p>
+    <h1>🍽️ API Restaurant</h1>
+    <p class="subtitle">Documentation interactive des endpoints</p>
+
+    <h2>👤 Utilisateurs (Users)</h2>
 
     <div class="endpoint-card">
         <div class="endpoint-header">
@@ -134,31 +147,16 @@
             <span class="path">/users</span>
             <a href="/users" target="_blank" class="action-btn">Tester →</a>
         </div>
-        <div class="endpoint-body">
-            Récupère la liste de tous les utilisateurs enregistrés dans la base de données.
-        </div>
+        <div class="endpoint-body">Liste tous les utilisateurs.</div>
     </div>
 
     <div class="endpoint-card">
         <div class="endpoint-header">
             <span class="method get">GET</span>
             <span class="path">/users/{id}</span>
-            <a href="/users/1" target="_blank" class="action-btn">Exemple (ID=1) →</a>
+            <a href="/users/1" target="_blank" class="action-btn">ID=1 →</a>
         </div>
-        <div class="endpoint-body">
-            Récupère les détails d'un utilisateur spécifique via son ID unique.
-        </div>
-    </div>
-
-    <div class="endpoint-card">
-        <div class="endpoint-header">
-            <span class="method get">GET</span>
-            <span class="path">/users/search?name=...</span>
-            <a href="/users/search?name=Alice" target="_blank" class="action-btn">Chercher "Alice" →</a>
-        </div>
-        <div class="endpoint-body">
-            Recherche des utilisateurs dont le nom contient la chaîne de caractères fournie.
-        </div>
+        <div class="endpoint-body">Récupère un utilisateur par ID.</div>
     </div>
 
     <div class="endpoint-card">
@@ -167,19 +165,8 @@
             <span class="path">/users</span>
         </div>
         <div class="endpoint-body">
-            Ajoute un nouvel utilisateur.
-            <div class="note">Nécessite un corps JSON : { "name": "...", "email": "...", "age": ... }</div>
-        </div>
-    </div>
-
-    <div class="endpoint-card">
-        <div class="endpoint-header">
-            <span class="method put">PUT</span>
-            <span class="path">/users/{id}</span>
-        </div>
-        <div class="endpoint-body">
-            Met à jour les informations d'un utilisateur existant.
-            <div class="note">Nécessite un corps JSON complet.</div>
+            Ajoute un utilisateur.
+            <div class="note">{ "name": "Matteo", "nbPoints": 0 }</div>
         </div>
     </div>
 
@@ -188,13 +175,162 @@
             <span class="method delete">DELETE</span>
             <span class="path">/users/{id}</span>
         </div>
+        <div class="endpoint-body">Supprime un utilisateur.</div>
+    </div>
+
+    <h2>📂 Catégories</h2>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="path">/categories</span>
+            <a href="/categories" target="_blank" class="action-btn">Tester →</a>
+        </div>
+        <div class="endpoint-body">Liste toutes les catégories de plats.</div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="path">/categories</span>
+        </div>
         <div class="endpoint-body">
-            Supprime définitivement un utilisateur de la base de données.
+            Créer une catégorie.
+            <div class="note">{ "nom": "Entrées" }</div>
+        </div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method put">PUT</span>
+            <span class="path">/categories/{id}</span>
+        </div>
+        <div class="endpoint-body">
+            Modifier une catégorie.
+            <div class="note">{ "nom": "Desserts" }</div>
+        </div>
+    </div>
+
+    <h2>🍕 Plats</h2>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="path">/plats</span>
+            <a href="/plats" target="_blank" class="action-btn">Tester →</a>
+        </div>
+        <div class="endpoint-body">Liste tous les plats disponibles.</div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="path">/plats</span>
+        </div>
+        <div class="endpoint-body">
+            Ajoute un plat.
+            <div class="note">
+                {
+                "name": "Pizza Royale",
+                "description": "Jambon, fromage, champignons",
+                "prix": 12.50,
+                "photoUrl": "http://img.com/pizza.jpg",
+                "quantite": 50
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method delete">DELETE</span>
+            <span class="path">/plats/{id}</span>
+        </div>
+        <div class="endpoint-body">Supprime un plat du menu.</div>
+    </div>
+
+    <h2>📝 Commandes</h2>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="path">/commandes</span>
+            <a href="/commandes" target="_blank" class="action-btn">Tester →</a>
+        </div>
+        <div class="endpoint-body">Liste toutes les commandes.</div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="path">/commandes</span>
+        </div>
+        <div class="endpoint-body">
+            Créer une nouvelle commande.
+            <div class="note">
+                {
+                "heure_commande": "12:30",
+                "prix_total": 25,
+                "statut": "EN_PREPARATION",
+                "id_utilisateur": 1
+                }
+            </div>
+        </div>
+    </div>
+
+    <h2>🛒 Lignes de Commande (Détails)</h2>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="path">/lignes-commande</span>
+            <a href="/lignes-commande" target="_blank" class="action-btn">Tester →</a>
+        </div>
+        <div class="endpoint-body">Affiche le détail des articles commandés.</div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="path">/lignes-commande</span>
+        </div>
+        <div class="endpoint-body">
+            Ajoute un élément à une commande.
+            <div class="note">
+                {
+                "id_commande": 1,
+                "id_plat": 2,
+                "qualite": 2,
+                "options_choisies": "Sans oignon"
+                }
+            </div>
+        </div>
+    </div>
+
+    <h2>🔗 Liaisons Catégorie-Plat</h2>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="path">/categorie-plats</span>
+            <a href="/categorie-plats" target="_blank" class="action-btn">Tester →</a>
+        </div>
+        <div class="endpoint-body">Voir les associations plats/catégories.</div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="path">/categorie-plats</span>
+        </div>
+        <div class="endpoint-body">
+            Associer un plat à une catégorie.
+            <div class="note">{ "id_plat": 1, "id_categorie": 3 }</div>
         </div>
     </div>
 
     <footer>
-        Développé avec Java, Javalin & MySQL • Projet JAVA • ISEN
+        Développé avec Java, Javalin & MySQL • ISEN 2025
     </footer>
 </div>
 
