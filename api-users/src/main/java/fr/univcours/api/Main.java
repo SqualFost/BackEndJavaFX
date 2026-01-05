@@ -1,6 +1,7 @@
 package fr.univcours.api;
 
 import io.javalin.Javalin;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,13 +11,14 @@ import java.nio.charset.StandardCharsets;
  * Classe principale qui démarre le serveur API
  */
 public class Main {
-    private static UserService userService = new UserServiceImpl();
+    private static final UserService userService = new UserServiceImpl();
 
     public static void main(String[] args) {
         // Créer et configurer l'application Javalin
+        Database.getInstance().checkConnection();
         Javalin app = Javalin.create(config -> {
             config.plugins.enableCors(cors -> {
-                cors.add(it -> it.anyHost());
+                cors.add(CorsPluginConfig::anyHost);
             });
         }).start(7001);
 
@@ -29,7 +31,7 @@ public class Main {
             ctx.json(userService.getAllUsers());
         });
         
-        // Route GET /users/:id - Rechercher un utilisateur par son prénom
+        // Route GET /users/search?name="" - Rechercher un utilisateur par son prénom
         app.get("/users/search", ctx ->{
             String name = ctx.queryParam("name");
             ctx.json(userService.searchByName(name));
@@ -57,7 +59,7 @@ public class Main {
             if (!newUser.getEmail().matches("^[^@]+@[^@]+\\.[^@]+$")){
                 ctx.status(400).result("Email invalide");
                 return;
-            };
+            }
 
             User created = userService.addUser(newUser);
             ctx.status(201).json(created);

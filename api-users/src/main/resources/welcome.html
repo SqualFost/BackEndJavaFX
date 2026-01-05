@@ -1,15 +1,202 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>API Users</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation API Users</title>
     <style>
-        /* Styles CSS pour une page d'accueil professionnelle */
+        :root {
+            --primary-color: #4a90e2;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333;
+            --code-bg: #f0f0f0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 40px 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+        }
+
+        .endpoint-card {
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            transition: transform 0.2s;
+            overflow: hidden;
+        }
+
+        .endpoint-card:hover {
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .endpoint-header {
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            background-color: #fafbfc;
+            border-bottom: 1px solid #e1e4e8;
+        }
+
+        .method {
+            font-weight: bold;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            margin-right: 15px;
+            min-width: 60px;
+            text-align: center;
+            color: white;
+        }
+
+        .get { background-color: #27ae60; }
+        .post { background-color: #f39c12; }
+        .put { background-color: #2980b9; }
+        .delete { background-color: #c0392b; }
+
+        .path {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #34495e;
+            flex-grow: 1;
+        }
+
+        .endpoint-body {
+            padding: 15px 20px;
+            font-size: 0.95em;
+            color: #555;
+        }
+
+        .action-btn {
+            text-decoration: none;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .note {
+            font-size: 0.8em;
+            color: #999;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.8em;
+            color: #bdc3c7;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🎉 Bienvenue sur l'API Users</h1>
-        <!-- Liste des endpoints avec liens de test -->
+
+<div class="container">
+    <h1>🚀 API Users</h1>
+    <p class="subtitle">Documentation et interface de test</p>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="path">/users</span>
+            <a href="/users" target="_blank" class="action-btn">Tester →</a>
+        </div>
+        <div class="endpoint-body">
+            Récupère la liste de tous les utilisateurs enregistrés dans la base de données.
+        </div>
     </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="path">/users/{id}</span>
+            <a href="/users/1" target="_blank" class="action-btn">Exemple (ID=1) →</a>
+        </div>
+        <div class="endpoint-body">
+            Récupère les détails d'un utilisateur spécifique via son ID unique.
+        </div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method get">GET</span>
+            <span class="path">/users/search?name=...</span>
+            <a href="/users/search?name=Alice" target="_blank" class="action-btn">Chercher "Alice" →</a>
+        </div>
+        <div class="endpoint-body">
+            Recherche des utilisateurs dont le nom contient la chaîne de caractères fournie.
+        </div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method post">POST</span>
+            <span class="path">/users</span>
+        </div>
+        <div class="endpoint-body">
+            Ajoute un nouvel utilisateur.
+            <div class="note">Nécessite un corps JSON : { "name": "...", "email": "...", "age": ... }</div>
+        </div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method put">PUT</span>
+            <span class="path">/users/{id}</span>
+        </div>
+        <div class="endpoint-body">
+            Met à jour les informations d'un utilisateur existant.
+            <div class="note">Nécessite un corps JSON complet.</div>
+        </div>
+    </div>
+
+    <div class="endpoint-card">
+        <div class="endpoint-header">
+            <span class="method delete">DELETE</span>
+            <span class="path">/users/{id}</span>
+        </div>
+        <div class="endpoint-body">
+            Supprime définitivement un utilisateur de la base de données.
+        </div>
+    </div>
+
+    <footer>
+        Développé avec Java, Javalin & MySQL • Projet JAVA • ISEN
+    </footer>
+</div>
+
 </body>
 </html>
