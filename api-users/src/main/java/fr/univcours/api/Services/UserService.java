@@ -1,12 +1,18 @@
-package fr.univcours.api;
+package fr.univcours.api.Services;
+
+import fr.univcours.api.Database.Database;
+import fr.univcours.api.Models.User;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class UserServiceImpl implements UserService {
-    @Override
+/**
+ * Interface qui définit le CRUD pour la gestion des utilisateurs
+ */
+
+public class UserService {
     public List<User> getAllUsers() {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM user";
@@ -24,7 +30,6 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    @Override
     public Optional<User> getUserById(int id) {
         String query = "SELECT * FROM user WHERE id = ?";
 
@@ -43,16 +48,15 @@ public class UserServiceImpl implements UserService {
         return Optional.empty();
     }
 
-    @Override
     public User addUser(User user) {
-        String query = "INSERT INTO user (name, email, age) VALUES (?, ?, ?)";
+        String query = "INSERT INTO user (name, nbPoints) VALUES (?, ?)";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, user.getName());
-            pstmt.setString(2, user.getEmail());
-            pstmt.setInt(3, user.getAge());
+            pstmt.setInt(2, user.getNbPoints());
+
 
             int affectedRows = pstmt.executeUpdate();
 
@@ -69,24 +73,6 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    @Override
-    public boolean deleteUser(int id) {
-        String query = "DELETE FROM user WHERE id = ?";
-
-        try (Connection conn = Database.getInstance().getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setInt(1, id);
-            int affectedRows = pstmt.executeUpdate();
-            return affectedRows > 0;
-
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
-    }
-
-    @Override
     public List<User> searchByName(String name) {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM user WHERE name LIKE ?";
@@ -106,12 +92,52 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    public User updateById(int id, User userData) {
+        String sql = "UPDATE users SET nom = ? , nbPoints = ? WHERE id = ?";
+
+        try (Connection conn = Database.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, userData.getName());
+            stmt.setInt(2, userData.getNbPoints());
+            stmt.setInt(3, id);
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                userData.setId(id);
+                return userData;
+            }
+            return null;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erreur lors de la modification de l'utilisateur", e);
+        }
+    }
+
+    public boolean deleteUser(int id) throws SQLException {
+        String sql = "DELETE FROM users WHERE id = ?";
+
+        try (Connection conn = Database.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+
+            int rowsAffected = stmt.executeUpdate();
+            // Si rowsAffected > 0, c'est qu'on a bien supprimé quelqu'un
+            return rowsAffected > 0;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         return new User(
                 rs.getInt("id"),
                 rs.getString("name"),
-                rs.getString("email"),
-                rs.getInt("age")
+                rs.getInt("nbPoints")
         );
     }
 }
+
+

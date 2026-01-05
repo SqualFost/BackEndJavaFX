@@ -1,4 +1,4 @@
-package fr.univcours.api;
+package fr.univcours.api.Database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

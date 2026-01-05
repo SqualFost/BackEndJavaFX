@@ -1,4 +1,4 @@
-package fr.univcours.api;
+package fr.univcours.api.Models;
 
 /**
  * Classe représentant un utilisateur
@@ -6,19 +6,17 @@ package fr.univcours.api;
 public class User {
     private int id;
     private String name;
-    private String email;
-    private int age;
+    private int nbPoints;
 
     // Constructeur par défaut (nécessaire pour Jackson)
     public User() {
     }
 
     // Constructeur avec paramètres
-    public User(int id, String name, String email, int age) {
+    public User(int id, String name, int nbPoints) {
         this.id = id;
         this.name = name;
-        this.email = email;
-        this.age = age;
+        this.nbPoints = nbPoints;
     }
 
     // Getters et Setters (nécessaires pour la conversion JSON)
@@ -38,19 +36,11 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public int getNbPoints() {
+        return nbPoints;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
+    public void setNbPoints(int nbPoints) {
+        this.nbPoints = nbPoints;
     }
 }

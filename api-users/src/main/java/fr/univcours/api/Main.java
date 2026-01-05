@@ -1,18 +1,15 @@
 package fr.univcours.api;
 
+import fr.univcours.api.Controller.UserController;
+import fr.univcours.api.Database.Database;
+
 import io.javalin.Javalin;
 import io.javalin.plugin.bundled.CorsPluginConfig;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Classe principale qui démarre le serveur API
  */
 public class Main {
-    private static final UserService userService = new UserServiceImpl();
-
     public static void main(String[] args) {
         // Créer et configurer l'application Javalin
         Database.getInstance().checkConnection();
@@ -27,98 +24,25 @@ public class Main {
         System.out.println("📋 Essayez : http://localhost:7001/users");
 
         // Route GET /users - Récupère tous les utilisateurs
-        app.get("/users", ctx -> {
-            ctx.json(userService.getAllUsers());
-        });
+        app.get("/users", UserController::getAllUser);
         
         // Route GET /users/search?name="" - Rechercher un utilisateur par son prénom
-        app.get("/users/search", ctx ->{
-            String name = ctx.queryParam("name");
-            ctx.json(userService.searchByName(name));
-        });
+        app.get("/users/search", UserController::searchByName);
 
         // Route GET /users/:id - Récupère un utilisateur par ID
-        app.get("/users/{id}", ctx -> {
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            userService.getUserById(id)
-            .ifPresentOrElse(
-                user -> ctx.json(user),
-                () -> ctx.status(404).result("Utilisateur non trouvé")
-            );
-        });
+        app.get("/users/{id}", UserController::getUserById);
         
         // Route POST /users - Ajoute un utilisateur
-        app.post("/users", ctx -> {
-            User newUser = ctx.bodyAsClass(User.class);
-
-            if (newUser.getAge() < 0){
-                ctx.status(404).result("Age négatif");
-                return;
-            }
-                
-            if (!newUser.getEmail().matches("^[^@]+@[^@]+\\.[^@]+$")){
-                ctx.status(400).result("Email invalide");
-                return;
-            }
-
-            User created = userService.addUser(newUser);
-            ctx.status(201).json(created);
-        });
+        app.post("/users", UserController::addUser);
 
         // Route POST /users/:id - Modifie un utilisateur
-        app.put("/users/{id}", ctx ->{
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            User donneActualisee = ctx.bodyAsClass(User.class);
-
-            userService.getUserById(id)
-                    .ifPresentOrElse(
-                        user -> {
-                            user.setName(donneActualisee.getName());
-                            user.setAge(donneActualisee.getAge());
-                            user.setEmail(donneActualisee.getEmail());
-                            ctx.json(user);
-                        },
-                        () -> ctx.status(404).result("Utilisateur non trouvé")
-                    );
-        });
+        app.put("/users/{id}", UserController::updateById);
 
         
         // Route DELETE /users/:id - Supprime un utilisateur
-        app.delete("/users/{id}", ctx ->{
-            int id = Integer.parseInt(ctx.pathParam("id"));
-            boolean suppr = userService.deleteUser(id);
-
-            if (suppr) {
-                ctx.status(204);
-            } else {
-                ctx.status(404).result("Utilisateur non trouvé");
-            }
-        });
+        app.delete("/users/{id}", UserController::deleteUser);
 
         // Route GET / - Page d'accueil
-        app.get("/", ctx -> {
-            ctx.html(getWelcomeHTML());
-        });
-    }
-
-    /**
-     * Charge la page HTML d'accueil depuis les ressources
-     */
-    private static String getWelcomeHTML() {
-        try {
-            InputStream inputStream = Main.class.getClassLoader()
-                    .getResourceAsStream("welcome.html");
-
-            if (inputStream == null) {
-                return "<h1>Erreur : Page non trouvée</h1>";
-            }
-
-            return new String(inputStream.readAllBytes(),
-                    StandardCharsets.UTF_8);
-
-        } catch (IOException e) {
-            System.err.println("❌ Erreur: " + e.getMessage());
-            return "<h1>Erreur de chargement</h1>";
-        }
+        app.get("/", UserController::getHome);
     }
 }
