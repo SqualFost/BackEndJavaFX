@@ -41,7 +41,7 @@ public class UserController {
             return;
         }
 
-        if (!newUser.getName().matches("^[A-Za-zÀ-ÖØ-öø-ÿ\\- ]{2,50}$")) {
+        if (!newUser.getNom().matches("^[A-Za-zÀ-ÖØ-öø-ÿ\\- ]{2,50}$")) {
             ctx.status(400).result("Nom invalide");
             return;
         }
@@ -68,7 +68,7 @@ public class UserController {
         userService.getUserById(id)
                 .ifPresentOrElse(
                         user -> {
-                            user.setName(donneActualisee.getName());
+                            user.setNom(donneActualisee.getNom());
                             user.setNbPoints(donneActualisee.getNbPoints());
                             ctx.json(user);
                         },

@@ -35,7 +35,7 @@ public class PlatController {
                 .ifPresentOrElse(
                         plat -> {
                             // Mise à jour des champs
-                            plat.setName(data.getName());
+                            plat.setNom(data.getNom());
                             plat.setDescription(data.getDescription());
                             plat.setPrix(data.getPrix());
                             plat.setPhotoUrl(data.getPhotoUrl());

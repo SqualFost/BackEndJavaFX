@@ -1,13 +1,13 @@
 package fr.univcours.api.Models;
 
-public class Ligne_Commande {
+public class Commande_Plat {
     private int id;
     private int id_commande;
     private int id_plat;
-    private int qualite;
+    private int quantite;
     private String options_choisies;
 
-    public Ligne_Commande(){
+    public Commande_Plat(){
 
     }
 
@@ -35,12 +35,12 @@ public class Ligne_Commande {
         this.id_plat = id_plat;
     }
 
-    public int getQualite() {
-        return qualite;
+    public int getQuantite() {
+        return quantite;
     }
 
-    public void setQualite(int qualite) {
-        this.qualite = qualite;
+    public void setQuantite(int qualite) {
+        this.quantite = qualite;
     }
 
     public String getOptions_choisies() {

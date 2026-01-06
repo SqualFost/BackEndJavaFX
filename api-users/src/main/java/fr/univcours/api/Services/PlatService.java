@@ -52,7 +52,7 @@ public class PlatService {
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, plat.getName());
+            pstmt.setString(1, plat.getNom());
             pstmt.setString(2, plat.getDescription());
             pstmt.setFloat(3, plat.getPrix());
             pstmt.setString(4, plat.getPhotoUrl());
@@ -79,7 +79,7 @@ public class PlatService {
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, platData.getName());
+            stmt.setString(1, platData.getNom());
             stmt.setString(2, platData.getDescription());
             stmt.setFloat(3, platData.getPrix());
             stmt.setString(4, platData.getPhotoUrl());
@@ -115,7 +115,7 @@ public class PlatService {
     private Plat mapResultSetToPlat(ResultSet rs) throws SQLException {
         return new Plat(
                 rs.getInt("id"),
-                rs.getString("name"),
+                rs.getString("nom"),
                 rs.getString("description"),
                 rs.getFloat("prix"),
                 rs.getString("photoUrl"),

@@ -5,7 +5,7 @@ package fr.univcours.api.Models;
  */
 public class User {
     private int id;
-    private String name;
+    private String nom;
     private int nbPoints;
 
     // Constructeur par défaut (nécessaire pour Jackson)
@@ -13,9 +13,9 @@ public class User {
     }
 
     // Constructeur avec paramètres
-    public User(int id, String name, int nbPoints) {
+    public User(int id, String nom, int nbPoints) {
         this.id = id;
-        this.name = name;
+        this.nom = nom;
         this.nbPoints = nbPoints;
     }
 
@@ -28,12 +28,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNom() {
+        return nom;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public int getNbPoints() {

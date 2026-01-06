@@ -1,17 +1,17 @@
 package fr.univcours.api.Services;
 
 import fr.univcours.api.Database.Database;
-import fr.univcours.api.Models.Ligne_Commande;
+import fr.univcours.api.Models.Commande_Plat;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class LigneCommandeService {
+public class CommandePlatService {
 
-    public List<Ligne_Commande> getAllLignesCommande() {
-        List<Ligne_Commande> lignes = new ArrayList<>();
+    public List<Commande_Plat> getAllLignesCommande() {
+        List<Commande_Plat> lignes = new ArrayList<>();
         String query = "SELECT * FROM ligne_commande";
 
         try (Connection conn = Database.getInstance().getConnection();
@@ -27,7 +27,7 @@ public class LigneCommandeService {
         return lignes;
     }
 
-    public Optional<Ligne_Commande> getLigneById(int id) {
+    public Optional<Commande_Plat> getLigneById(int id) {
         String query = "SELECT * FROM ligne_commande WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
@@ -45,7 +45,7 @@ public class LigneCommandeService {
         return Optional.empty();
     }
 
-    public Ligne_Commande addLigne(Ligne_Commande ligne) {
+    public Commande_Plat addLigne(Commande_Plat ligne) {
         String query = "INSERT INTO ligne_commande (id_commande, id_plat, qualite, options_choisies) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = Database.getInstance().getConnection();
@@ -53,7 +53,7 @@ public class LigneCommandeService {
 
             pstmt.setInt(1, ligne.getId_commande());
             pstmt.setInt(2, ligne.getId_plat());
-            pstmt.setInt(3, ligne.getQualite());
+            pstmt.setInt(3, ligne.getQuantite());
             pstmt.setString(4, ligne.getOptions_choisies());
 
             int affectedRows = pstmt.executeUpdate();
@@ -71,7 +71,7 @@ public class LigneCommandeService {
         return ligne;
     }
 
-    public Ligne_Commande updateLigne(int id, Ligne_Commande ligneData) {
+    public Commande_Plat updateLigne(int id, Commande_Plat ligneData) {
         String sql = "UPDATE ligne_commande SET id_commande = ?, id_plat = ?, qualite = ?, options_choisies = ? WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
@@ -79,7 +79,7 @@ public class LigneCommandeService {
 
             stmt.setInt(1, ligneData.getId_commande());
             stmt.setInt(2, ligneData.getId_plat());
-            stmt.setInt(3, ligneData.getQualite());
+            stmt.setInt(3, ligneData.getQuantite());
             stmt.setString(4, ligneData.getOptions_choisies());
             stmt.setInt(5, id);
 
@@ -109,12 +109,12 @@ public class LigneCommandeService {
         }
     }
 
-    private Ligne_Commande mapResultSetToLigne(ResultSet rs) throws SQLException {
-        Ligne_Commande l = new Ligne_Commande();
+    private Commande_Plat mapResultSetToLigne(ResultSet rs) throws SQLException {
+        Commande_Plat l = new Commande_Plat();
         l.setId(rs.getInt("id"));
         l.setId_commande(rs.getInt("id_commande"));
         l.setId_plat(rs.getInt("id_plat"));
-        l.setQualite(rs.getInt("qualite"));
+        l.setQuantite(rs.getInt("qualite"));
         l.setOptions_choisies(rs.getString("options_choisies"));
         return l;
     }

@@ -21,7 +21,6 @@ public class Main {
 
         // Message de démarrage
         System.out.println("🚀 Serveur démarré sur http://localhost:7001");
-        System.out.println("📋 Documentation : http://localhost:7001/");
 
         // --- Routes PAGE D'ACCUEIL ---
         app.get("/", UserController::getHome);
@@ -56,11 +55,11 @@ public class Main {
         app.delete("/commandes/{id}", CommandeController::deleteCommande);
 
         // --- Routes LIGNES DE COMMANDE ---
-        app.get("/lignes-commande", LigneCommandeController::getAllLignes);
-        app.get("/lignes-commande/{id}", LigneCommandeController::getLigneById);
-        app.post("/lignes-commande", LigneCommandeController::addLigne);
-        app.put("/lignes-commande/{id}", LigneCommandeController::updateLigne);
-        app.delete("/lignes-commande/{id}", LigneCommandeController::deleteLigne);
+        app.get("/lignes-commande", CommandePlatController::getAllLignes);
+        app.get("/lignes-commande/{id}", CommandePlatController::getLigneById);
+        app.post("/lignes-commande", CommandePlatController::addLigne);
+        app.put("/lignes-commande/{id}", CommandePlatController::updateLigne);
+        app.delete("/lignes-commande/{id}", CommandePlatController::deleteLigne);
 
         // --- Routes ASSOCIATIONS CATEGORIE-PLAT ---
         app.get("/categorie-plats", CategoriePlatController::getAll);

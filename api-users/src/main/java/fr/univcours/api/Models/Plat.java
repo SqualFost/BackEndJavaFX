@@ -2,7 +2,7 @@ package fr.univcours.api.Models;
 
 public class Plat {
     private int id;
-    private String name;
+    private String nom;
     private String description;
     private float prix;
     private String photoUrl;
@@ -12,9 +12,9 @@ public class Plat {
 
     }
 
-    public Plat(int id, String name, String description, float prix, String photoUrl, int quantite) {
+    public Plat(int id, String nom, String description, float prix, String photoUrl, int quantite) {
         this.id = id;
-        this.name = name;
+        this.nom = nom;
         this.description = description;
         this.prix = prix;
         this.photoUrl = photoUrl;
@@ -29,12 +29,12 @@ public class Plat {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getNom() {
+        return nom;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
     public String getDescription() {

@@ -49,12 +49,12 @@ public class UserService {
     }
 
     public User addUser(User user) {
-        String query = "INSERT INTO user (name, nbPoints) VALUES (?, ?)";
+        String query = "INSERT INTO User (nom, nbPoints) VALUES (?, ?)";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            pstmt.setString(1, user.getName());
+            pstmt.setString(1, user.getNom());
             pstmt.setInt(2, user.getNbPoints());
 
 
@@ -93,12 +93,12 @@ public class UserService {
     }
 
     public User updateById(int id, User userData) {
-        String sql = "UPDATE users SET nom = ? , nbPoints = ? WHERE id = ?";
+        String sql = "UPDATE User SET nom = ? , nbPoints = ? WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, userData.getName());
+            stmt.setString(1, userData.getNom());
             stmt.setInt(2, userData.getNbPoints());
             stmt.setInt(3, id);
 
@@ -116,7 +116,7 @@ public class UserService {
     }
 
     public boolean deleteUser(int id) throws SQLException {
-        String sql = "DELETE FROM users WHERE id = ?";
+        String sql = "DELETE FROM user WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -134,7 +134,7 @@ public class UserService {
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
         return new User(
                 rs.getInt("id"),
-                rs.getString("name"),
+                rs.getString("nom"),
                 rs.getInt("nbPoints")
         );
     }
