@@ -14,8 +14,8 @@ public class Main {
         // Créer et configurer l'application Javalin
         Database.getInstance().checkConnection();
         Javalin app = Javalin.create(config -> {
-            config.plugins.enableCors(cors -> {
-                cors.add(CorsPluginConfig::anyHost);
+            config.bundledPlugins.enableCors(cors -> {
+                cors.addRule(CorsPluginConfig.CorsRule::anyHost);
             });
         }).start(7001);
 
