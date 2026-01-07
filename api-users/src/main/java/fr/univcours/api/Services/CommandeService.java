@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service qui gère les opérations liées aux commandes.
+ */
 public class CommandeService {
 
+    // Récupère toutes les commandes depuis la base de données
     public List<Commande> getAllCommandes() {
         List<Commande> commandes = new ArrayList<>();
         String query = "SELECT * FROM commande";
@@ -18,6 +22,7 @@ public class CommandeService {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
+            // Parcours des résultats et création des objets Commande
             while (rs.next()) {
                 commandes.add(mapResultSetToCommande(rs));
             }
@@ -27,6 +32,7 @@ public class CommandeService {
         return commandes;
     }
 
+    // Récupère une commande à partir de son id
     public Optional<Commande> getCommandeById(int id) {
         String query = "SELECT * FROM commande WHERE id = ?";
 
@@ -45,6 +51,7 @@ public class CommandeService {
         return Optional.empty();
     }
 
+    // Ajoute une nouvelle commande dans la base de données
     public Commande addCommande(Commande commande) {
         String query = "INSERT INTO commande (heure_commande, prix_total, statut, id_utilisateur) VALUES (?, ?, ?, ?)";
 
@@ -56,6 +63,7 @@ public class CommandeService {
             pstmt.setString(3, commande.getStatut());
             pstmt.setInt(4, commande.getId_utilisateur());
 
+            // Exécution de la requête d’insertion
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
@@ -71,6 +79,7 @@ public class CommandeService {
         return commande;
     }
 
+    // Met à jour une commande existante
     public Commande updateCommande(int id, Commande commandeData) {
         String sql = "UPDATE commande SET heure_commande = ?, prix_total = ?, statut = ?, id_utilisateur = ? WHERE id = ?";
 
@@ -83,6 +92,7 @@ public class CommandeService {
             stmt.setInt(4, commandeData.getId_utilisateur());
             stmt.setInt(5, id);
 
+            // Exécution de la requête de mise à jour
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -96,12 +106,15 @@ public class CommandeService {
         }
     }
 
+    // Supprime une commande à partir de son id
     public boolean deleteCommande(int id) throws SQLException {
         String sql = "DELETE FROM commande WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
+
+            // Exécution de la requête de suppression
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -109,6 +122,7 @@ public class CommandeService {
         }
     }
 
+    // Convertit une ligne du ResultSet en objet Commande
     private Commande mapResultSetToCommande(ResultSet rs) throws SQLException {
         Commande c = new Commande();
 

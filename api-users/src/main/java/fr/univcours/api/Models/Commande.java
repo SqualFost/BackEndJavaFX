@@ -1,5 +1,9 @@
 package fr.univcours.api.Models;
 
+/**
+ * Modèle de Commandes, contient un id, l'heure de commande, le prix total de la commande,
+ * son statut (en préparation/prête) et l'id de la personne qui l'a commandée.
+ */
 public class Commande {
     private int id;
     private String heure_commande;

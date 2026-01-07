@@ -12,21 +12,29 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 
+/**
+ * Controller qui gère les routes liées aux utilisateurs.
+ */
 public class UserController {
+    // Service utilisé pour gérer les opérations sur les utilisateurs
     private static final UserService userService = new UserService() {
     };
 
+    // Récupère la liste de tous les utilisateurs
     public static void getAllUser(Context ctx) {
         ctx.json(userService.getAllUsers());
     }
 
+    // Recherche des utilisateurs à partir du nom passé en paramètre
     public static void searchByName(Context ctx) {
         String name = ctx.queryParam("name");
         ctx.json(userService.searchByName(name));
     }
 
+    // Récupère un utilisateur à partir de son id
     public static void getUserById(Context ctx) {
         int id = Integer.parseInt(ctx.pathParam("id"));
+        // Recherche de l’utilisateur correspondant à l’id
         userService.getUserById(id)
                 .ifPresentOrElse(
                         user -> ctx.json(user),
@@ -34,13 +42,16 @@ public class UserController {
                 );
     }
 
+    // Ajoute un nouvel utilisateur après vérification des données
     public static void addUser(Context ctx) {
         User newUser = ctx.bodyAsClass(User.class);
+        // Vérifie que le compteur de points commence bien à 0
         if (newUser.getNbPoints() != 0){
             ctx.status(404).result("Compteur de points négatif");
             return;
         }
 
+        // Vérifie que le nom respecte le format attendu
         if (!newUser.getNom().matches("^[A-Za-zÀ-ÖØ-öø-ÿ\\- ]{2,50}$")) {
             ctx.status(400).result("Nom invalide");
             return;
@@ -50,8 +61,10 @@ public class UserController {
         ctx.status(201).json(created);
     }
 
+    // Supprime un utilisateur à partir de son id
     public static void deleteUser(Context ctx) throws SQLException {
         int id = Integer.parseInt(ctx.pathParam("id"));
+        // Tentative de suppression de l’utilisateur
         boolean suppr = userService.deleteUser(id);
 
         if (suppr) {
@@ -61,10 +74,12 @@ public class UserController {
         }
     }
 
+    // Met à jour les informations d’un utilisateur existant
     public static void updateById(Context ctx) {
         int id = Integer.parseInt(ctx.pathParam("id"));
         User donneActualisee = ctx.bodyAsClass(User.class);
 
+        // Recherche de l’utilisateur à modifier
         userService.getUserById(id)
                 .ifPresentOrElse(
                         user -> {
@@ -76,13 +91,14 @@ public class UserController {
                 );
     }
 
+    // Affiche la page d’accueil HTML
     public static void getHome(Context ctx) {
         ctx.html(getWelcomeHTML());
     }
 
 
     /**
-     * Charge la page HTML d'accueil depuis les ressources
+     * Récupère le fichier HTML d’accueil depuis les ressources
      */
     private static String getWelcomeHTML() {
         try {

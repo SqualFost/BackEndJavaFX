@@ -1,7 +1,8 @@
 package fr.univcours.api.Models;
 
 /**
- * Classe représentant un utilisateur
+ * Modèle d'utilisateurs, contient un id, un nom d'utilisateur
+ * et son nombre de points (système de fidélité non implémenté pour le moment).
  */
 public class User {
     private int id;

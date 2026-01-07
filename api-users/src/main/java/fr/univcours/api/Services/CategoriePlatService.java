@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service qui gère les opérations liées aux catégories de plats.
+ */
 public class CategoriePlatService {
 
+    // Récupère toutes les associations catégorie-plat depuis la base de données
     public List<Categorie_Plat> getAllCategoriePlats() {
         List<Categorie_Plat> list = new ArrayList<>();
         String query = "SELECT * FROM categorie_plat";
@@ -18,6 +22,7 @@ public class CategoriePlatService {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
+            // Parcours des résultats et création des objets Categorie_Plat
             while (rs.next()) {
                 list.add(mapResultSetToCategoriePlat(rs));
             }
@@ -27,6 +32,7 @@ public class CategoriePlatService {
         return list;
     }
 
+    // Récupère une association catégorie-plat à partir de son id
     public Optional<Categorie_Plat> getById(int id) {
         String query = "SELECT * FROM categorie_plat WHERE id = ?";
 
@@ -45,6 +51,7 @@ public class CategoriePlatService {
         return Optional.empty();
     }
 
+    // Ajoute une nouvelle association catégorie-plat dans la base de données
     public Categorie_Plat add(Categorie_Plat cp) {
         String query = "INSERT INTO categorie_plat (id_plat, id_categorie) VALUES (?, ?)";
 
@@ -54,6 +61,7 @@ public class CategoriePlatService {
             pstmt.setInt(1, cp.getId_plat());
             pstmt.setInt(2, cp.getId_categorie());
 
+            // Exécution de la requête d’insertion
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
@@ -69,6 +77,7 @@ public class CategoriePlatService {
         return cp;
     }
 
+    // Met à jour une association catégorie-plat existante
     public Categorie_Plat update(int id, Categorie_Plat cpData) {
         String sql = "UPDATE categorie_plat SET id_plat = ?, id_categorie = ? WHERE id = ?";
 
@@ -79,6 +88,7 @@ public class CategoriePlatService {
             stmt.setInt(2, cpData.getId_categorie());
             stmt.setInt(3, id);
 
+            // Exécution de la requête de mise à jour
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -92,12 +102,14 @@ public class CategoriePlatService {
         }
     }
 
+    // Supprime une association catégorie-plat à partir de son id
     public boolean delete(int id) throws SQLException {
         String sql = "DELETE FROM categorie_plat WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
+            // Exécution de la requête de suppression
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -105,6 +117,7 @@ public class CategoriePlatService {
         }
     }
 
+    // Convertit une ligne du ResultSet en objet Categorie_Plat
     private Categorie_Plat mapResultSetToCategoriePlat(ResultSet rs) throws SQLException {
         Categorie_Plat cp = new Categorie_Plat();
 

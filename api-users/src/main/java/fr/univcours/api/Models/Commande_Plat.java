@@ -1,5 +1,9 @@
 package fr.univcours.api.Models;
 
+/**
+ * Modèle de Commande de plats, contient un id, qui joint l'id de la commande ainsi que celui du plat
+ * la quantité commandée et les options choisies.
+ */
 public class Commande_Plat {
     private int id;
     private int id_commande;

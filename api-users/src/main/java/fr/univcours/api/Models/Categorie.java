@@ -1,5 +1,8 @@
 package fr.univcours.api.Models;
 
+/**
+ * Modèle de catégorie, contient l’id et le nom.
+ */
 public class Categorie {
     private int id;
     private String nom;
@@ -20,4 +23,3 @@ public class Categorie {
         this.nom = nom;
     }
 }
-

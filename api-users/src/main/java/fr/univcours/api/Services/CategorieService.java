@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service qui gère les opérations liées aux catégories.
+ */
 public class CategorieService {
 
+    // Récupère toutes les catégories depuis la base de données
     public List<Categorie> getAllCategories() {
         List<Categorie> categories = new ArrayList<>();
         String query = "SELECT * FROM categorie";
@@ -18,6 +22,7 @@ public class CategorieService {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
+            // Parcours des résultats et création des objets Categorie
             while (rs.next()) {
                 categories.add(mapResultSetToCategorie(rs));
             }
@@ -27,6 +32,7 @@ public class CategorieService {
         return categories;
     }
 
+    // Récupère une catégorie à partir de son id
     public Optional<Categorie> getCategorieById(int id) {
         String query = "SELECT * FROM categorie WHERE id = ?";
 
@@ -45,6 +51,7 @@ public class CategorieService {
         return Optional.empty();
     }
 
+    // Ajoute une nouvelle catégorie dans la base de données
     public Categorie addCategorie(Categorie categorie) {
         String query = "INSERT INTO categorie (nom) VALUES (?)";
 
@@ -53,6 +60,7 @@ public class CategorieService {
 
             pstmt.setString(1, categorie.getNom());
 
+            // Exécution de la requête d’insertion
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
@@ -68,6 +76,7 @@ public class CategorieService {
         return categorie;
     }
 
+    // Met à jour une catégorie existante
     public Categorie updateCategorie(int id, Categorie categorieData) {
         String sql = "UPDATE categorie SET nom = ? WHERE id = ?";
 
@@ -77,6 +86,7 @@ public class CategorieService {
             stmt.setString(1, categorieData.getNom());
             stmt.setInt(2, id);
 
+            // Exécution de la requête de mise à jour
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -90,6 +100,7 @@ public class CategorieService {
         }
     }
 
+    // Supprime une catégorie à partir de son id
     public boolean deleteCategorie(int id) throws SQLException {
         String sql = "DELETE FROM categorie WHERE id = ?";
 
@@ -97,6 +108,7 @@ public class CategorieService {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
 
+            // Exécution de la requête de suppression
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
 
@@ -105,6 +117,7 @@ public class CategorieService {
         }
     }
 
+    // Convertit une ligne du ResultSet en objet Categorie
     private Categorie mapResultSetToCategorie(ResultSet rs) throws SQLException {
         Categorie categorie = new Categorie();
 

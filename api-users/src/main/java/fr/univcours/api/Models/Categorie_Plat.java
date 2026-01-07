@@ -1,5 +1,8 @@
 package fr.univcours.api.Models;
 
+/**
+ * Modèle de Categories de plats, contient un id, un nom de categorie et un id de plat
+ */
 public class Categorie_Plat {
     private int id;
     private int id_plat;

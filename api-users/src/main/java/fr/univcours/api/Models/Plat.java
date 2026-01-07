@@ -1,5 +1,9 @@
 package fr.univcours.api.Models;
 
+/**
+ * Modèle de Plats, contient un id, son nom, sa description, son prix, le chemin de sa photo
+ * et la quantité restante.
+ */
 public class Plat {
     private int id;
     private String nom;

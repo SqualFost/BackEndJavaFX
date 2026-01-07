@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service qui gère les opérations liées aux plats.
+ */
 public class PlatService {
 
+    // Récupère tous les plats depuis la base de données
     public List<Plat> getAllPlats() {
         List<Plat> plats = new ArrayList<>();
         String query = "SELECT * FROM plat";
@@ -18,6 +22,7 @@ public class PlatService {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
+            // Parcours des résultats et création des objets Plat
             while (rs.next()) {
                 plats.add(mapResultSetToPlat(rs));
             }
@@ -27,6 +32,7 @@ public class PlatService {
         return plats;
     }
 
+    // Récupère un plat à partir de son id
     public Optional<Plat> getPlatById(int id) {
         String query = "SELECT * FROM plat WHERE id = ?";
 
@@ -45,6 +51,7 @@ public class PlatService {
         return Optional.empty();
     }
 
+    // Ajoute un nouveau plat dans la base de données
     public Plat addPlat(Plat plat) {
         // Attention: 'name' dans le modèle Plat, pas 'nom'
         String query = "INSERT INTO plat (name, description, prix, photoUrl, quantite) VALUES (?, ?, ?, ?, ?)";
@@ -58,6 +65,7 @@ public class PlatService {
             pstmt.setString(4, plat.getPhotoUrl());
             pstmt.setInt(5, plat.getQuantite());
 
+            // Exécution de la requête d’insertion
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
@@ -73,6 +81,7 @@ public class PlatService {
         return plat;
     }
 
+    // Met à jour un plat existant
     public Plat updatePlat(int id, Plat platData) {
         String sql = "UPDATE plat SET name = ?, description = ?, prix = ?, photoUrl = ?, quantite = ? WHERE id = ?";
 
@@ -86,6 +95,7 @@ public class PlatService {
             stmt.setInt(5, platData.getQuantite());
             stmt.setInt(6, id);
 
+            // Exécution de la requête de mise à jour
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -99,12 +109,15 @@ public class PlatService {
         }
     }
 
+    // Supprime un plat à partir de son id
     public boolean deletePlat(int id) throws SQLException {
         String sql = "DELETE FROM plat WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
+
+            // Exécution de la requête de suppression
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -112,6 +125,7 @@ public class PlatService {
         }
     }
 
+    // Convertit une ligne du ResultSet en objet Plat
     private Plat mapResultSetToPlat(ResultSet rs) throws SQLException {
         Plat p =  new Plat();
 

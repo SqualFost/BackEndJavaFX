@@ -8,8 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Service qui gère les opérations liées aux lignes de commande.
+ */
 public class CommandePlatService {
 
+    // Récupère toutes les lignes de commande depuis la base de données
     public List<Commande_Plat> getAllLignesCommande() {
         List<Commande_Plat> lignes = new ArrayList<>();
         String query = "SELECT * FROM ligne_commande";
@@ -18,6 +22,7 @@ public class CommandePlatService {
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
+            // Parcours des résultats et création des objets Commande_Plat
             while (rs.next()) {
                 lignes.add(mapResultSetToLigne(rs));
             }
@@ -27,6 +32,7 @@ public class CommandePlatService {
         return lignes;
     }
 
+    // Récupère une ligne de commande à partir de son id
     public Optional<Commande_Plat> getLigneById(int id) {
         String query = "SELECT * FROM ligne_commande WHERE id = ?";
 
@@ -45,6 +51,7 @@ public class CommandePlatService {
         return Optional.empty();
     }
 
+    // Ajoute une nouvelle ligne de commande dans la base de données
     public Commande_Plat addLigne(Commande_Plat ligne) {
         String query = "INSERT INTO ligne_commande (id_commande, id_plat, qualite, options_choisies) VALUES (?, ?, ?, ?)";
 
@@ -56,6 +63,7 @@ public class CommandePlatService {
             pstmt.setInt(3, ligne.getQuantite());
             pstmt.setString(4, ligne.getOptions_choisies());
 
+            // Exécution de la requête d’insertion
             int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
@@ -71,6 +79,7 @@ public class CommandePlatService {
         return ligne;
     }
 
+    // Met à jour une ligne de commande existante
     public Commande_Plat updateLigne(int id, Commande_Plat ligneData) {
         String sql = "UPDATE ligne_commande SET id_commande = ?, id_plat = ?, qualite = ?, options_choisies = ? WHERE id = ?";
 
@@ -83,6 +92,7 @@ public class CommandePlatService {
             stmt.setString(4, ligneData.getOptions_choisies());
             stmt.setInt(5, id);
 
+            // Exécution de la requête de mise à jour
             int rowsAffected = stmt.executeUpdate();
 
             if (rowsAffected > 0) {
@@ -96,12 +106,15 @@ public class CommandePlatService {
         }
     }
 
+    // Supprime une ligne de commande à partir de son id
     public boolean deleteLigne(int id) throws SQLException {
         String sql = "DELETE FROM ligne_commande WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
+
+            // Exécution de la requête de suppression
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -109,6 +122,7 @@ public class CommandePlatService {
         }
     }
 
+    // Convertit une ligne du ResultSet en objet Commande_Plat
     private Commande_Plat mapResultSetToLigne(ResultSet rs) throws SQLException {
         Commande_Plat l = new Commande_Plat();
 
