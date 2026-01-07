@@ -7,10 +7,6 @@ public class Commande_Plat {
     private int quantite;
     private String options_choisies;
 
-    public Commande_Plat(){
-
-    }
-
     public int getId() {
         return id;
     }

@@ -111,11 +111,13 @@ public class CommandePlatService {
 
     private Commande_Plat mapResultSetToLigne(ResultSet rs) throws SQLException {
         Commande_Plat l = new Commande_Plat();
+
         l.setId(rs.getInt("id"));
         l.setId_commande(rs.getInt("id_commande"));
         l.setId_plat(rs.getInt("id_plat"));
         l.setQuantite(rs.getInt("qualite"));
         l.setOptions_choisies(rs.getString("options_choisies"));
+
         return l;
     }
 }

@@ -106,9 +106,11 @@ public class CategorieService {
     }
 
     private Categorie mapResultSetToCategorie(ResultSet rs) throws SQLException {
-        return new Categorie(
-                rs.getInt("id"),
-                rs.getString("nom")
-        );
+        Categorie categorie = new Categorie();
+
+        categorie.setId(rs.getInt("id"));
+        categorie.setNom(rs.getString("nom"));
+
+        return categorie;
     }
 }

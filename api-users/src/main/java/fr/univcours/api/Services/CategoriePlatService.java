@@ -107,9 +107,11 @@ public class CategoriePlatService {
 
     private Categorie_Plat mapResultSetToCategoriePlat(ResultSet rs) throws SQLException {
         Categorie_Plat cp = new Categorie_Plat();
+
         cp.setId(rs.getInt("id"));
         cp.setId_plat(rs.getInt("id_plat"));
         cp.setId_categorie(rs.getInt("id_categorie"));
+
         return cp;
     }
 }

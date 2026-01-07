@@ -111,11 +111,13 @@ public class CommandeService {
 
     private Commande mapResultSetToCommande(ResultSet rs) throws SQLException {
         Commande c = new Commande();
+
         c.setId(rs.getInt("id"));
         c.setHeure_commande(rs.getString("heure_commande"));
         c.setPrix_total(rs.getInt("prix_total"));
         c.setStatut(rs.getString("statut"));
         c.setId_utilisateur(rs.getInt("id_utilisateur"));
+
         return c;
     }
 }

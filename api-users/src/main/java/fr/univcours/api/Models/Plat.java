@@ -8,19 +8,6 @@ public class Plat {
     private String photoUrl;
     private int quantite;
 
-    public Plat(){
-
-    }
-
-    public Plat(int id, String nom, String description, float prix, String photoUrl, int quantite) {
-        this.id = id;
-        this.nom = nom;
-        this.description = description;
-        this.prix = prix;
-        this.photoUrl = photoUrl;
-        this.quantite = quantite;
-    }
-
     public int getId() {
         return id;
     }

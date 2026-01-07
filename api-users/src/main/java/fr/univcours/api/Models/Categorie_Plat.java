@@ -5,15 +5,6 @@ public class Categorie_Plat {
     private int id_plat;
     private int id_categorie;
 
-    public Categorie_Plat(){
-
-    }
-
-    public Categorie_Plat(int id, int id_plat, int id_categorie) {
-        this.id = id;
-        this.id_plat = id_plat;
-    }
-
     public int getId() {
         return id;
     }

@@ -7,10 +7,6 @@ public class Commande {
     private String statut;
     private int id_utilisateur;
 
-    public Commande(){
-
-    }
-
     public int getId() {
         return id;
     }

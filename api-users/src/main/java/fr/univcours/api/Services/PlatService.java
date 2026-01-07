@@ -113,13 +113,15 @@ public class PlatService {
     }
 
     private Plat mapResultSetToPlat(ResultSet rs) throws SQLException {
-        return new Plat(
-                rs.getInt("id"),
-                rs.getString("nom"),
-                rs.getString("description"),
-                rs.getFloat("prix"),
-                rs.getString("photoUrl"),
-                rs.getInt("quantite")
-        );
+        Plat p =  new Plat();
+
+        p.setId(rs.getInt("id"));
+        p.setNom(rs.getString("nom"));
+        p.setDescription(rs.getString("description"));
+        p.setPrix(rs.getFloat("prix"));
+        p.setPhotoUrl(rs.getString("photoUrl"));
+        p.setQuantite(rs.getInt("quantite"));
+
+        return p;
     }
 }

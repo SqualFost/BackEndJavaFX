@@ -8,17 +8,6 @@ public class User {
     private String nom;
     private int nbPoints;
 
-    // Constructeur par défaut (nécessaire pour Jackson)
-    public User() {
-    }
-
-    // Constructeur avec paramètres
-    public User(int id, String nom, int nbPoints) {
-        this.id = id;
-        this.nom = nom;
-        this.nbPoints = nbPoints;
-    }
-
     // Getters et Setters (nécessaires pour la conversion JSON)
     public int getId() {
         return id;

@@ -132,11 +132,13 @@ public class UserService {
     }
 
     private User mapResultSetToUser(ResultSet rs) throws SQLException {
-        return new User(
-                rs.getInt("id"),
-                rs.getString("nom"),
-                rs.getInt("nbPoints")
-        );
+        User user = new User();
+
+        user.setId(rs.getInt("id"));
+        user.setNom(rs.getString("nom"));
+        user.setNbPoints(rs.getInt("nbPoints"));
+
+        return user;
     }
 }
 
