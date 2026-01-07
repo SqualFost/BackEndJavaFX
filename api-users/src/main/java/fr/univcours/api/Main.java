@@ -4,18 +4,25 @@ import fr.univcours.api.Controller.*;
 import fr.univcours.api.Database.Database;
 
 import io.javalin.Javalin;
+import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.bundled.CorsPluginConfig;
+
+import java.nio.file.*;
 
 /**
  * Classe principale qui démarre le serveur API
  */
 public class Main {
     public static void main(String[] args) {
-        // Créer et configurer l'application Javalin
         Database.getInstance().checkConnection();
         Javalin app = Javalin.create(config -> {
             config.bundledPlugins.enableCors(cors -> {
                 cors.addRule(CorsPluginConfig.CorsRule::anyHost);
+            });
+            config.staticFiles.add(staticFileConfig -> {
+                staticFileConfig.hostedPath = "/images";
+                staticFileConfig.directory = "/images";
+                staticFileConfig.location = Location.CLASSPATH;
             });
         }).start(7001);
 
@@ -67,5 +74,16 @@ public class Main {
         app.post("/categorie-plats", CategoriePlatController::add);
         app.put("/categorie-plats/{id}", CategoriePlatController::update);
         app.delete("/categorie-plats/{id}", CategoriePlatController::delete);
+
+        app.get("/images/{filename}", ctx -> {
+            String filename = ctx.pathParam("filename");
+            java.io.InputStream is = Main.class.getResourceAsStream("/images/" + filename);
+            if (is != null) {
+                ctx.contentType("image/png");
+                ctx.result(is);
+            } else {
+                ctx.status(404).result("Image not found");
+            }
+        });
     }
 }

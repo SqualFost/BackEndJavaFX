@@ -26,7 +26,8 @@ CREATE TABLE Plat (
     prix FLOAT NOT NULL,  -- Note : DECIMAL(10,2) serait mieux pour de l'argent, mais FLOAT fonctionne
     photourl TEXT NOT NULL,
     quantite INT NOT NULL, -- Stock disponible
-    disponible BOOLEAN DEFAULT TRUE -- Ajout utile pour la gestion du menu
+    disponible BOOLEAN DEFAULT TRUE, -- Ajout utile pour la gestion du menu
+    photo LONGBLOB DEFAULT NULL
 );
 
 -- --------------------------------------------------
@@ -79,9 +80,9 @@ CREATE TABLE LigneCommande (
 -- --------------------------------------------------
 INSERT INTO Categorie (nom) VALUES ('Entrées'), ('Plats'), ('Desserts');
 
-INSERT INTO Plat (nom, description, prix, photourl, quantite) VALUES 
-('Nems Poulet', '4 pièces croustillantes', 5.50, 'nems.jpg', 100),
-('Bo Bun', 'Vermicelles, boeuf, nems', 12.90, 'bobun.jpg', 50);
+INSERT INTO Plat (nom, description, prix, photourl, quantite, disponible, photo) VALUES
+('Sushi', 'Sushi au tartare de boeuf', 7.50, 'sushi.jpg', 100, 1, LOAD_FILE('images/sushi.png')),
+('Ramen', 'Ramen au Bouillon de Poulet', 12.90, 'ramen.jpg', 100, 1, LOAD_FILE('images/ramen.png'));
 
 -- Liaison : Nems (id 1) sont une Entrée (id 1)
 INSERT INTO categorie_plat (id_plat, id_categorie) VALUES (1, 1);
