@@ -10,16 +10,21 @@ import io.javalin.plugin.bundled.CorsPluginConfig;
 import java.nio.file.*;
 
 /**
- * Classe principale qui démarre le serveur API
+ * Classe principale qui démarre le serveur Javalin et configure toutes les routes de l'API.
  */
 public class Main {
     public static void main(String[] args) {
+        // Vérifie que la connexion à la base de données fonctionne avant de démarrer le serveur
         Database.getInstance().checkConnection();
+
+        // Création et configuration du serveur Javalin
         Javalin app = Javalin.create(config -> {
             config.bundledPlugins.enableCors(cors -> {
+                // Autorise le CORS depuis n'importe quelle origine
                 cors.addRule(CorsPluginConfig.CorsRule::anyHost);
             });
             config.staticFiles.add(staticFileConfig -> {
+                // Configuration des fichiers statiques pour les images
                 staticFileConfig.hostedPath = "/images";
                 staticFileConfig.directory = "/images";
                 staticFileConfig.location = Location.CLASSPATH;

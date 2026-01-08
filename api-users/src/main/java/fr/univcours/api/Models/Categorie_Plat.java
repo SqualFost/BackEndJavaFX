@@ -1,0 +1,34 @@
+package fr.univcours.api.Models;
+
+/**
+ * Modèle de Categories de plats, contient un id, un nom de categorie et un id de plat
+ */
+public class Categorie_Plat {
+    private int id;
+    private int id_plat;
+    private int id_categorie;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getId_plat() {
+        return id_plat;
+    }
+
+    public void setId_plat(int id_plat) {
+        this.id_plat = id_plat;
+    }
+
+    public int getId_categorie() {
+        return id_categorie;
+    }
+
+    public void setId_categorie(int id_categorie) {
+        this.id_categorie = id_categorie;
+    }
+}

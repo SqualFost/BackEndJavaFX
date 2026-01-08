@@ -81,8 +81,9 @@ CREATE TABLE LigneCommande (
 INSERT INTO Categorie (nom) VALUES ('Entrées'), ('Plats'), ('Desserts');
 
 INSERT INTO Plat (nom, description, prix, photourl, quantite, disponible, photo) VALUES
-('Sushi', 'Sushi au tartare de boeuf', 7.50, 'sushi.jpg', 100, 1, LOAD_FILE('images/sushi.png')),
-('Ramen', 'Ramen au Bouillon de Poulet', 12.90, 'ramen.jpg', 100, 1, LOAD_FILE('images/ramen.png'));
+('Sushi', 'Sushi au tartare de boeuf', 7.50, 'sushi.png', 100, 1, LOAD_FILE('images/sushi.png')),
+('Ramen', 'Ramen au Bouillon de Poulet', 12.90, 'ramen.png', 100, 1, LOAD_FILE('images/ramen.png')),
+('Bibimbap', 'De tout', 16, 'bibimbap.png', 100, 1, LOAD_FILE('images/bibimbap.png'));
 
 -- Liaison : Nems (id 1) sont une Entrée (id 1)
 INSERT INTO categorie_plat (id_plat, id_categorie) VALUES (1, 1);
