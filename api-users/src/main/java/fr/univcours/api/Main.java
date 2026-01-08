@@ -25,8 +25,8 @@ public class Main {
             });
             config.staticFiles.add(staticFileConfig -> {
                 // Configuration des fichiers statiques pour les images
-                staticFileConfig.hostedPath = "/images";
-                staticFileConfig.directory = "/images";
+                staticFileConfig.hostedPath = null;
+                staticFileConfig.directory = "/";
                 staticFileConfig.location = Location.CLASSPATH;
             });
         }).start(7001);
