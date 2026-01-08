@@ -86,8 +86,8 @@ INSERT INTO Categorie (id, nom) VALUES
 
 -- IDs 1 et 2
 INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
-(1, 'Sushi', 'Sushi au tartare de boeuf', 7.5, 'sushi.jpg', 100, 1),
-(2, 'Ramen', 'Ramen au Bouillon de Poulet', 12.9, 'ramen.jpg', 100, 1);
+(1, 'Sushi', 'Sushi au tartare de boeuf', 7.5, 'sushi.png', 100, 1),
+(2, 'Ramen', 'Ramen au Bouillon de Poulet', 12.9, 'ramen.png', 100, 1);
 
 -- IDs 3 à 19 (Entrées)
 INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
