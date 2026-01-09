@@ -62,7 +62,7 @@ public class PlatServiceImpl extends PlatService {
     // Ajoute un nouveau plat dans la base de données
     @Override
     public Plat addPlat(Plat plat) {
-        String sql = "INSERT INTO plat (name, description, prix, photoUrl, quantite) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO plat (nom, description, prix, photoUrl, quantite) VALUES (?, ?, ?, ?, ?)";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -96,7 +96,7 @@ public class PlatServiceImpl extends PlatService {
     // Met à jour un plat existant
     @Override
     public Plat updatePlat(int id, Plat platData) {
-        String sql = "UPDATE plat SET name = ?, description = ?, prix = ?, photoUrl = ?, quantite = ? WHERE id = ?";
+        String sql = "UPDATE plat SET nom = ?, description = ?, prix = ?, photoUrl = ?, quantite = ? WHERE id = ?";
 
         try (Connection conn = Database.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -146,7 +146,7 @@ public class PlatServiceImpl extends PlatService {
         Plat p = new Plat();
 
         p.setId(rs.getInt("id"));
-        p.setNom(rs.getString("name")); // Champ SQL name ↔ attribut Java nom
+        p.setNom(rs.getString("nom")); // Champ SQL nom ↔ attribut Java nom
         p.setDescription(rs.getString("description"));
         p.setPrix(rs.getFloat("prix"));
         p.setPhotoUrl(rs.getString("photoUrl"));
