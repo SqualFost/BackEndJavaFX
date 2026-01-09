@@ -4,10 +4,7 @@ import fr.univcours.api.Controller.*;
 import fr.univcours.api.Database.Database;
 
 import io.javalin.Javalin;
-import io.javalin.http.staticfiles.Location;
 import io.javalin.plugin.bundled.CorsPluginConfig;
-
-import java.nio.file.*;
 
 /**
  * Classe principale qui démarre le serveur Javalin et configure toutes les routes de l'API.
@@ -23,12 +20,7 @@ public class Main {
                 // Autorise le CORS depuis n'importe quelle origine
                 cors.addRule(CorsPluginConfig.CorsRule::anyHost);
             });
-            config.staticFiles.add(staticFileConfig -> {
-                // Configuration des fichiers statiques pour les images
-                staticFileConfig.hostedPath = null;
-                staticFileConfig.directory = "/";
-                staticFileConfig.location = Location.CLASSPATH;
-            });
+            // J'AI SUPPRIMÉ LE BLOC "config.staticFiles" QUI FAISAIT PLANTER DOCKER
         }).start(7001);
 
         // Message de démarrage
@@ -80,8 +72,10 @@ public class Main {
         app.put("/categorie-plats/{id}", CategoriePlatController::update);
         app.delete("/categorie-plats/{id}", CategoriePlatController::delete);
 
+        // --- GESTION MANUELLE DES IMAGES (Celle-ci fonctionne !) ---
         app.get("/images/{filename}", ctx -> {
             String filename = ctx.pathParam("filename");
+            // Attention : assure-toi que tes images sont bien dans src/main/resources/images
             java.io.InputStream is = Main.class.getResourceAsStream("/images/" + filename);
             if (is != null) {
                 ctx.contentType("image/png");

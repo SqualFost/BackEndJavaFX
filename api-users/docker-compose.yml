@@ -17,7 +17,8 @@ services:  # <--- backend et db doivent être décalés sous cette ligne
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: restaurant_db
+      MYSQL_DATABASE: clicknwok
+      restart: on-failure
     ports:
       - "3306:3306" # Ou 3307:3306 si tu as changé
     volumes:

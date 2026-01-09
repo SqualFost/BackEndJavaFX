@@ -17,10 +17,12 @@ fr\univcours\api\ServicesImpl\UserServiceImpl.class
 fr\univcours\api\ServicesImpl\PlatServiceImpl.class
 fr\univcours\api\Controller\CategoriePlatController.class
 fr\univcours\api\Main.class
+fr\univcours\api\code_gener\Services\ResultSet.class
 fr\univcours\api\code_gener\Services\CategorieService.class
 fr\univcours\api\code_gener\Models\Commande_Plat.class
 fr\univcours\api\Controller\UserController.class
 fr\univcours\api\code_gener\Models\Commande.class
 fr\univcours\api\code_gener\Models\Categorie.class
+fr\univcours\api\code_gener\Services\List.class
 fr\univcours\api\code_gener\Services\UserService.class
 fr\univcours\api\ServicesImpl\CommandeServiceImpl.class

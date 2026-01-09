@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class Database {
 
-    // --- 1. LE SINGLETON ---
+    // --- 1. LE SINGLETON (Pour que PlatServiceImpl soit content) ---
     private static Database instance;
 
     private Database() {
@@ -26,11 +26,13 @@ public class Database {
         String dbPort = System.getenv("DB_PORT");
 
         if (dbHost == null) dbHost = "localhost";
-        if (dbPort == null) dbPort = "3306"; // Ou 3307 si modifié
+        if (dbPort == null) dbPort = "3306"; // Vérifie si tu utilises 3306 ou 3307
 
-        String dbName = "restaurant_db";
+        // Mets ici le NOUVEAU nom de ta base
+        String dbName = "clicknwok";
         String user = "root";
         String pass = "root";
+
         String url = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
 
         try {
@@ -43,17 +45,32 @@ public class Database {
         }
     }
 
-    // --- 3. LA MÉTHODE MANQUANTE (checkConnection) ---
+    // --- 3. LE CHECK (Pour que Main.java soit content) ---
+    // --- 3. LE CHECK INTELLIGENT (Avec Retry) ---
     public void checkConnection() {
-        try (Connection conn = getConnection()) {
-            if (conn != null) {
-                System.out.println("✅ Connexion à la base de données réussie !");
+        System.out.println("🔄 Démarrage du serveur backend...");
+
+        int maxRetries = 15; // On essaie 15 fois
+        int waitTime = 3000; // 3 secondes d'attente entre chaque essai
+
+        for (int i = 0; i < maxRetries; i++) {
+            try (Connection conn = getConnection()) {
+                if (conn != null) {
+                    System.out.println("✅ VICTOIRE : Connexion établie avec la BDD 'clicknwok' !");
+                    return; // C'est gagné, on sort de la méthode et le serveur démarre
+                }
+            } catch (Exception e) {
+                System.out.println("⏳ Tentative " + (i + 1) + "/" + maxRetries + " : La BDD n'est pas encore prête (Connexion refusée)... on patiente 3s.");
+                try {
+                    Thread.sleep(waitTime); // Pause de 3 secondes
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
             }
-        } catch (SQLException e) {
-            System.err.println("❌ Échec de la connexion BDD.");
-            e.printStackTrace();
-            // On arrête tout si la BDD n'est pas là au démarrage
-            throw new RuntimeException("Arrêt du serveur : Pas de BDD.");
         }
+
+        // Si on arrive ici, c'est que ça a échoué 15 fois (45 secondes)
+        System.err.println("❌ ÉCHEC TOTAL : La BDD ne répond toujours pas.");
+        throw new RuntimeException("Arrêt du serveur : Impossible de joindre la BDD.");
     }
 }
