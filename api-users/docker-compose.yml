@@ -23,6 +23,7 @@ services:  # <--- backend et db doivent être décalés sous cette ligne
       - "3306:3306" # Ou 3307:3306 si tu as changé
     volumes:
       - db_data:/var/lib/mysql
+      - ../BDD/creation_bdd.sql:/docker-entrypoint-initdb.d/init.sql
 
 volumes:
   db_data:
