@@ -146,7 +146,7 @@ public class PlatServiceImpl extends PlatService {
         Plat p = new Plat();
 
         p.setId(rs.getInt("id"));
-        p.setNom(rs.getString("name")); // Champ SQL name ↔ attribut Java nom
+        p.setNom(rs.getString("nom")); // Champ SQL name ↔ attribut Java nom
         p.setDescription(rs.getString("description"));
         p.setPrix(rs.getFloat("prix"));
         p.setPhotoUrl(rs.getString("photoUrl"));

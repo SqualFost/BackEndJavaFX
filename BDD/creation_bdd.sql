@@ -1,27 +1,32 @@
 -- ============================================================
--- 1. NETTOYAGE COMPLET (Ordre inverse des dépendances)
+-- 1. NETTOYAGE COMPLET (On supprime tout, majuscules et minuscules)
 -- ============================================================
 SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS LigneCommande;
+DROP TABLE IF EXISTS lignecommande;
 DROP TABLE IF EXISTS categorie_plat;
 DROP TABLE IF EXISTS Commande;
+DROP TABLE IF EXISTS commande;
 DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS Plat;
+DROP TABLE IF EXISTS plat;
 DROP TABLE IF EXISTS Categorie;
+DROP TABLE IF EXISTS categorie;
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ============================================================
--- 2. CRÉATION DE LA STRUCTURE (TABLES)
+-- 2. CRÉATION DE LA STRUCTURE (TABLES EN MINUSCULES)
 -- ============================================================
 
--- Table Categorie
-CREATE TABLE Categorie (
+-- Table categorie
+CREATE TABLE categorie (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL
 );
 
--- Table Plat
-CREATE TABLE Plat (
+-- Table plat
+CREATE TABLE plat (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
@@ -29,50 +34,50 @@ CREATE TABLE Plat (
     photourl VARCHAR(255) NOT NULL,
     quantite INT NOT NULL,
     disponible BOOLEAN DEFAULT TRUE,
-    photo LONGBLOB DEFAULT NULL -- (Optionnel, au cas où)
+    photo LONGBLOB DEFAULT NULL
 );
 
--- Table User (Clients / Fidélité)
-CREATE TABLE User (
+-- Table user
+CREATE TABLE user (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(255) NOT NULL,
     nbPoints INT DEFAULT 0
 );
 
--- Table Commande (Le ticket global)
-CREATE TABLE Commande (
+-- Table commande
+CREATE TABLE commande (
     id INT AUTO_INCREMENT PRIMARY KEY,
     heure_commande DATETIME DEFAULT CURRENT_TIMESTAMP,
     prix_total FLOAT NOT NULL,
-    statut VARCHAR(50) NOT NULL, -- Ex: 'EN_COURS', 'PAYEE', 'PRETE'
+    statut VARCHAR(50) NOT NULL,
     id_utilisateur INT NULL,
-    FOREIGN KEY (id_utilisateur) REFERENCES User(id) ON DELETE SET NULL
+    FOREIGN KEY (id_utilisateur) REFERENCES user(id) ON DELETE SET NULL
 );
 
--- Table LigneCommande (Le détail : 2x Sushi, 1x Coca...)
-CREATE TABLE LigneCommande (
+-- Table lignecommande
+CREATE TABLE lignecommande (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_commande INT NOT NULL,
     id_plat INT NOT NULL,
     quantite INT NOT NULL,
-    options_choisies TEXT, -- Ex: "Sans oignon"
-    FOREIGN KEY (id_commande) REFERENCES Commande(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_plat) REFERENCES Plat(id)
+    options_choisies TEXT,
+    FOREIGN KEY (id_commande) REFERENCES commande(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_plat) REFERENCES plat(id)
 );
 
--- Table de liaison (Un plat peut être dans une catégorie)
+-- Table categorie_plat
 CREATE TABLE categorie_plat (
     id INT AUTO_INCREMENT PRIMARY KEY,
     id_plat INT NOT NULL,
     id_categorie INT NOT NULL,
-    FOREIGN KEY (id_plat) REFERENCES Plat(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_categorie) REFERENCES Categorie(id) ON DELETE CASCADE
+    FOREIGN KEY (id_plat) REFERENCES plat(id) ON DELETE CASCADE,
+    FOREIGN KEY (id_categorie) REFERENCES categorie(id) ON DELETE CASCADE
 );
 
 -- ============================================================
 -- 3. INSERTION DES CATÉGORIES
 -- ============================================================
-INSERT INTO Categorie (id, nom) VALUES
+INSERT INTO categorie (id, nom) VALUES
 (1, 'Entrées'),
 (2, 'Nouilles'),
 (3, 'Sushis'),
@@ -81,16 +86,12 @@ INSERT INTO Categorie (id, nom) VALUES
 (6, 'Boissons');
 
 -- ============================================================
--- 4. INSERTION DES PLATS (IDs 1 à 99 - DONNÉES EXACTES)
+-- 4. INSERTION DES PLATS (IDs 1 à 99)
 -- ============================================================
 
--- IDs 1 et 2
-INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
+INSERT INTO plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
 (1, 'Sushi', 'Sushi au tartare de boeuf', 7.5, 'sushi.jpg', 100, 1),
-(2, 'Ramen', 'Ramen au Bouillon de Poulet', 12.9, 'ramen.jpg', 100, 1);
-
--- IDs 3 à 19 (Entrées)
-INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
+(2, 'Ramen', 'Ramen au Bouillon de Poulet', 12.9, 'ramen.jpg', 100, 1),
 (3, 'Nems aux Légumes', '3 pièces - Galettes de riz croustillantes garnies de carottes, choux et vermicelles.', 4.5, 'nems_vege.png', 50, 1),
 (4, 'Nems Poulet', '3 pièces - Galettes de riz frites au poulet et légumes', 4.5, 'nems_poulet.png', 50, 1),
 (5, 'Nems Porc', '3 pièces - Traditionnels nems au porc et champignons noirs', 4.5, 'nems_porc.png', 50, 1),
@@ -107,10 +108,7 @@ INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VA
 (16, 'Soupe Pékinoise', 'Soupe aigre-douce pimentée au poulet', 4.5, 'soupe_pekinoise.png', 40, 1),
 (17, 'Raviolis Vapeur Crevette', '4 pièces - Ha Kao, pâte de riz translucide', 6, 'hakao.png', 30, 1),
 (18, 'Bouchées Porc Vapeur', '4 pièces - Siu Mai au porc et champignons', 5.9, 'siumai.png', 30, 1),
-(19, 'Kimchi', 'Choux fermenté épicé coréen', 3.5, 'kimchi.png', 40, 1);
-
--- IDs 20 à 35 (Nouilles)
-INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
+(19, 'Kimchi', 'Choux fermenté épicé coréen', 3.5, 'kimchi.png', 40, 1),
 (20, 'Ramen Shoyu', 'Bouillon soja, porc chashu, oeuf mollet, naruto', 12.5, 'ramen_shoyu.png', 30, 1),
 (21, 'Ramen Miso', 'Bouillon pâte miso riche, maïs, beurre, porc', 13, 'ramen_miso.png', 30, 1),
 (22, 'Ramen Tonkotsu', 'Bouillon os de porc crémeux, gingembre, sésame', 13.5, 'ramen_tonkotsu.png', 30, 1),
@@ -126,10 +124,7 @@ INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VA
 (32, 'Bo Bun Nem', 'Vermicelles froids, double ration de nems', 11.5, 'bobun_nem.png', 40, 1),
 (33, 'Pho Boeuf', 'Soupe vietnamienne, lamelles de boeuf, herbes fraîches', 12, 'pho_boeuf.png', 30, 1),
 (34, 'Nouilles Sautées Canard', 'Nouilles aux légumes et magret de canard laqué', 14.5, 'nouilles_canard.png', 20, 1),
-(35, 'Japchae', 'Nouilles de patate douce sautées au boeuf (Corée)', 12, 'japchae.png', 20, 1);
-
--- IDs 36 à 51 (Sushis)
-INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
+(35, 'Japchae', 'Nouilles de patate douce sautées au boeuf (Corée)', 12, 'japchae.png', 20, 1),
 (36, 'Sushi Saumon', '2 pièces - Nigiri saumon frais', 3.5, 'sushi_saumon.png', 50, 1),
 (37, 'Sushi Thon', '2 pièces - Nigiri thon rouge', 4, 'sushi_thon.png', 50, 1),
 (38, 'Sushi Crevette', '2 pièces - Nigiri crevette cuite', 3.5, 'sushi_ebi.png', 50, 1),
@@ -145,10 +140,7 @@ INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VA
 (48, 'Sashimi Saumon', '12 tranches de saumon frais', 14, 'sashimi_saumon.png', 20, 1),
 (49, 'Sashimi Thon', '12 tranches de thon frais', 16, 'sashimi_thon.png', 20, 1),
 (50, 'Chirashi Saumon', 'Bol de riz vinaigré recouvert de saumon', 13.5, 'chirashi_saumon.png', 25, 1),
-(51, 'Dragon Roll', '8 pièces - Anguille, avocat, surimi, sauce spéciale', 12, 'dragon_roll.png', 15, 1);
-
--- IDs 52 à 67 (Friture)
-INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
+(51, 'Dragon Roll', '8 pièces - Anguille, avocat, surimi, sauce spéciale', 12, 'dragon_roll.png', 15, 1),
 (52, 'Poulet Karaage', 'Poulet frit à la japonaise mariné gingembre soja', 6.5, 'karaage.png', 40, 1),
 (53, 'Tempura Crevettes', '5 pièces - Beignets de crevettes légers', 8.5, 'tempura_ebi.png', 30, 1),
 (54, 'Tempura Légumes', 'Assortiment de légumes frits croustillants', 7, 'tempura_legumes.png', 30, 1),
@@ -164,10 +156,7 @@ INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VA
 (64, 'Frites de Patate Douce', 'Accompagnement, sel épicé', 4.5, 'frites_patatedouce.png', 50, 1),
 (65, 'Riz Sauté Cantonnais', 'Riz sauté au wok, oeufs, jambon, petits pois', 5.5, 'riz_cantonnais.png', 50, 1),
 (66, 'Donburi Katsu', 'Grand bol de riz avec porc pané et oeuf', 13, 'katsudon.png', 20, 1),
-(67, 'Donburi Karaage', 'Grand bol de riz avec poulet frit et mayo', 12.5, 'karaagedon.png', 20, 1);
-
--- IDs 68 à 83 (Desserts)
-INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
+(67, 'Donburi Karaage', 'Grand bol de riz avec poulet frit et mayo', 12.5, 'karaagedon.png', 20, 1),
 (68, 'Mochi Glacé Vanille', '2 pièces - Pâte de riz fourrée glace vanille', 4.5, 'mochi_vanille.png', 40, 1),
 (69, 'Mochi Glacé Mangue', '2 pièces - Saveur fruitée tropicale', 4.5, 'mochi_mangue.png', 40, 1),
 (70, 'Mochi Glacé Thé Vert', '2 pièces - Saveur Matcha authentique', 4.5, 'mochi_matcha.png', 40, 1),
@@ -183,10 +172,7 @@ INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VA
 (80, 'Salade de Fruits Exotiques', 'Mangue, ananas, lychee, papaye', 4.5, 'salade_fruits.png', 30, 1),
 (81, 'Cheesecake Yuzu', 'Gâteau fromage au citron japonais', 5.5, 'cheesecake_yuzu.png', 20, 1),
 (82, 'Fondant Chocolat Matcha', 'Coeur coulant au thé vert', 5.5, 'fondant_matcha.png', 20, 1),
-(83, 'Banane Frite', 'Beignet de banane, miel et sésame', 4, 'banane_frite.png', 25, 1);
-
--- IDs 84 à 99 (Boissons)
-INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VALUES
+(83, 'Banane Frite', 'Beignet de banane, miel et sésame', 4, 'banane_frite.png', 25, 1),
 (84, 'Coca-Cola', '33cl - Canette rouge originale', 2.5, 'coca.png', 100, 1),
 (85, 'Coca-Cola Zéro', '33cl - Sans sucres', 2.5, 'coca_zero.png', 80, 1),
 (86, 'Sprite', '33cl - Citron citron vert', 2.5, 'sprite.png', 60, 1),
@@ -205,28 +191,16 @@ INSERT INTO Plat (id, nom, description, prix, photourl, quantite, disponible) VA
 (99, 'Bubble Tea Brown Sugar', 'Thé au lait, perles de tapioca, sucre roux', 5.5, 'bubbletea.png', 40, 1);
 
 -- ============================================================
--- 5. INSERTION DES LIENS (POUR L'AFFICHAGE PAR CATÉGORIE)
+-- 5. INSERTION DES LIENS (EN MINUSCULES)
 -- ============================================================
 
--- Entrées (inclut le reste des entrées + le Ramen isolé s'il est considéré comme une entrée)
-INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 1, id FROM Plat WHERE id BETWEEN 3 AND 19;
-
--- Nouilles (Inclut le Ramen ID 2 et les IDs 20 à 35)
+INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 1, id FROM plat WHERE id BETWEEN 3 AND 19;
 INSERT INTO categorie_plat (id_categorie, id_plat) VALUES (2, 2);
-INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 2, id FROM Plat WHERE id BETWEEN 20 AND 35;
-
--- Sushis (Inclut le Sushi ID 1 et les IDs 36 à 51)
+INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 2, id FROM plat WHERE id BETWEEN 20 AND 35;
 INSERT INTO categorie_plat (id_categorie, id_plat) VALUES (3, 1);
-INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 3, id FROM Plat WHERE id BETWEEN 36 AND 51;
+INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 3, id FROM plat WHERE id BETWEEN 36 AND 51;
+INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 4, id FROM plat WHERE id BETWEEN 52 AND 67;
+INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 5, id FROM plat WHERE id BETWEEN 68 AND 83;
+INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 6, id FROM plat WHERE id BETWEEN 84 AND 99;
 
--- Friture (IDs 52 à 67)
-INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 4, id FROM Plat WHERE id BETWEEN 52 AND 67;
-
--- Desserts (IDs 68 à 83)
-INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 5, id FROM Plat WHERE id BETWEEN 68 AND 83;
-
--- Boissons (IDs 84 à 99)
-INSERT INTO categorie_plat (id_categorie, id_plat) SELECT 6, id FROM Plat WHERE id BETWEEN 84 AND 99;
-
--- Test d'un utilisateur
-INSERT INTO User (nom, nbPoints) VALUES ('Client Test', 50);
+INSERT INTO user (nom, nbPoints) VALUES ('Client Test', 50);

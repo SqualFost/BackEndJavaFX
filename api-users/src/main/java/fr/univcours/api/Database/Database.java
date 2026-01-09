@@ -4,59 +4,56 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-/**
- * Connexion à la base de données MySQL existante.
- */
 public class Database {
 
-    // URL de connexion à la base de données MySQL
-    private static final String JDBC_URL = "jdbc:mysql://localhost:3306/clicknwok";
-
-    // Identifiants de connexion à la BDD
-    private static final String JDBC_USER = "root";
-    private static final String JDBC_PASSWORD = "";
-
-    // Instance unique de la classe (Singleton)
+    // --- 1. LE SINGLETON ---
     private static Database instance;
 
-    // Constructeur privé pour éviter plusieurs instances
     private Database() {
-        try {
-            // Chargement du driver JDBC MySQL
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            System.err.println("Driver JDBC non trouvé !");
-        }
+        // Constructeur privé
     }
 
-    // Méthode qui permet de récupérer l’instance unique de Database
-    public static synchronized Database getInstance() {
+    public static Database getInstance() {
         if (instance == null) {
             instance = new Database();
         }
         return instance;
     }
 
-    // Fonction qui permet de récupérer une connexion à la base de données
-    public Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(JDBC_URL, JDBC_USER, JDBC_PASSWORD);
+    // --- 2. LA CONNEXION (Compatible Docker & Local) ---
+    public Connection getConnection() {
+        String dbHost = System.getenv("DB_HOST");
+        String dbPort = System.getenv("DB_PORT");
+
+        if (dbHost == null) dbHost = "localhost";
+        if (dbPort == null) dbPort = "3306"; // Ou 3307 si modifié
+
+        String dbName = "restaurant_db";
+        String user = "root";
+        String pass = "root";
+        String url = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(url, user, pass);
+        } catch (ClassNotFoundException | SQLException e) {
+            System.err.println("❌ Erreur sur l'URL : " + url);
+            e.printStackTrace();
+            throw new RuntimeException("Impossible de se connecter à la base de données.");
+        }
     }
 
-    /**
-     * Fonction qui permet de vérifier la connexion à la BDD.
-     * Si la connexion échoue, une erreur est levée et le programme s’arrête.
-     * Sinon, on affiche un message de succès dans la console.
-     */
+    // --- 3. LA MÉTHODE MANQUANTE (checkConnection) ---
     public void checkConnection() {
         try (Connection conn = getConnection()) {
-            if (conn == null) {
-                throw new SQLException("La connexion est nulle");
+            if (conn != null) {
+                System.out.println("✅ Connexion à la base de données réussie !");
             }
-            System.out.println("Connexion à la base de données réussie !");
         } catch (SQLException e) {
-            System.err.println("Impossible de se connecter à la base de données.");
-            System.err.println("Détails : " + e.getMessage());
-            throw new RuntimeException("Arrêt du script, pas de connexion à la BDD", e);
+            System.err.println("❌ Échec de la connexion BDD.");
+            e.printStackTrace();
+            // On arrête tout si la BDD n'est pas là au démarrage
+            throw new RuntimeException("Arrêt du serveur : Pas de BDD.");
         }
     }
 }
