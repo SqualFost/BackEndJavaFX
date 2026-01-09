@@ -92,7 +92,7 @@ public class UserServiceImpl extends UserService {
 
     // Recherche des utilisateurs à partir de leur nom
     @Override
-    public List<User> searchByName(String name) {
+    public List<User> searchByName(String nom) {
         List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM user WHERE nom LIKE ?";
 
@@ -100,7 +100,7 @@ public class UserServiceImpl extends UserService {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             // Ajout du filtre de recherche
-            stmt.setString(1, "%" + name + "%");
+            stmt.setString(1, "%" + nom + "%");
 
             try (ResultSet rs = stmt.executeQuery()) {
                 // Parcours des résultats et création des objets User
